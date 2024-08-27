@@ -1,25 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import "./App.css";
+import { Container, MantineProvider } from "@mantine/core";
+import HomePage from "./pages/HomePage";
+import { useDay, DayProvider } from "./context/DayContext";
+
+const AppContent = () => {
+  const { selectedDay } = useDay();
+
+  const backgroundThemes: Record<string, string> = {
+    Sunny: 'url("/images/sky-theme.jpg")',
+    Rainy: 'url("/images/rain-theme.jpg")',
+    Snowy: 'url("/images/snow-theme.jpg")',
+  };
+
+  useEffect(() => {
+    console.log("selected day:", selectedDay);
+  });
+  return (
+    <Container
+      className="bg-cover bg-center min-h-screen"
+      style={{ backgroundImage: backgroundThemes[selectedDay] }}
+    >
+      <HomePage />
+    </Container>
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MantineProvider>
+      <DayProvider>
+        <AppContent />
+      </DayProvider>
+    </MantineProvider>
   );
 }
 
